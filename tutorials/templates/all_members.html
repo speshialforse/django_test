@@ -2,7 +2,7 @@
 <html>
   <script>
     console.log("test");
-    let data = unescape({{jsonmymembers}});
+    let data = {{jsonmymembers | safe}};
     console.log(data);
     function clickTest() {
       console.log("test dgdfgdf");

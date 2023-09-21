@@ -11,6 +11,7 @@ from rest_framework.decorators import api_view
 from django.http import HttpResponse
 from django.template import loader
 import json
+from json import JSONEncoder
 
 @api_view(['GET', 'POST', 'DELETE'])
 def tutorial_list(request):
@@ -70,7 +71,13 @@ def tutorial_list_published(request):
         
     if request.method == 'GET': 
         tutorials_serializer = TutorialSerializer(tutorials, many=True)
-        return JsonResponse(tutorials_serializer.data, safe=False)
+        x = {
+            "name": "John",
+            "age": 30,
+            "city": "New York"
+            }
+        # return JsonResponse(tutorials_serializer.data, safe=False)
+        return JsonResponse(json.dumps(x), safe=False)
     
 def members(request):
     mymembers = Tutorial.objects.all().values()
@@ -81,11 +88,49 @@ def members(request):
         "age": 30,
         "city": "New York"
         }
+    
+    contacts = {"xxx-xxx-xxxx": "Joe",
+            "yyy-yyy-yyyy": "Joe",
+            "zzz-zzz-zzzz": "Ane",
+            "aaa-aaa-aaaa": "Rod",
+            }
+
+    apps = ["facebook",
+            "linkedin",
+            "twitter"]
+
+    myMobile = MobilePhone(contacts, apps)
+    jsonString = MobilePhoneEncoder().encode(myMobile)
 
     # convert into JSON:
     y = json.dumps(x)
     context = {
         'mymembers': mymembers,
-        'jsonmymembers': json.dumps(x),
+        'jsonmymembers': jsonString,
     }
     return HttpResponse(template.render(context, request))
+
+# A class with JSON Serialization support
+
+class MobilePhone:
+    contacts = None
+    apps = None
+
+    def __init__(self, contacts, apps):
+        self.contacts   = contacts
+        self.apps       = apps
+
+    def startCall():
+        pass
+ 
+    def endCall():
+        pass
+# A specialised JSONEncoder that encodes MobilePhone
+
+# objects as JSON
+class MobilePhoneEncoder(JSONEncoder):
+    def default(self, object):
+        if isinstance(object, MobilePhone):
+            return object.__dict__
+        else:
+            return json.JSONEncoder.default(self, object)
