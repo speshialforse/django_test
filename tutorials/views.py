@@ -73,19 +73,19 @@ def tutorial_list_published(request):
         return JsonResponse(tutorials_serializer.data, safe=False)
     
 def members(request):
-  mymembers = Tutorial.objects.all().values()
-  template = loader.get_template('all_members.html')
-  jsonmymembers = TutorialSerializer(mymembers, many=True)
-  x = {
-    "name": "John",
-    "age": 30,
-    "city": "New York"
-    }
+    mymembers = Tutorial.objects.all().values()
+    template = loader.get_template('all_members.html')
+    jsonmymembers = TutorialSerializer(mymembers, many=True)
+    x = {
+        "name": "John",
+        "age": 30,
+        "city": "New York"
+        }
 
-  # convert into JSON:
-  y = json.dumps(x)
-  context = {
-    'mymembers': mymembers,
-    'jsonmymembers': json.dumps(x),
-  }
-  return HttpResponse(template.render(context, request))
+    # convert into JSON:
+    y = json.dumps(x)
+    context = {
+        'mymembers': mymembers,
+        'jsonmymembers': json.dumps(x),
+    }
+    return HttpResponse(template.render(context, request))
