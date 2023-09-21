@@ -10,6 +10,7 @@ from rest_framework.decorators import api_view
 
 from django.http import HttpResponse
 from django.template import loader
+import json
 
 @api_view(['GET', 'POST', 'DELETE'])
 def tutorial_list(request):
@@ -75,8 +76,16 @@ def members(request):
   mymembers = Tutorial.objects.all().values()
   template = loader.get_template('all_members.html')
   jsonmymembers = TutorialSerializer(mymembers, many=True)
+  x = {
+    "name": "John",
+    "age": 30,
+    "city": "New York"
+    }
+
+  # convert into JSON:
+  y = json.dumps(x)
   context = {
     'mymembers': mymembers,
-    'jsonmymembers': jsonmymembers,
+    'jsonmymembers': json.dumps(x),
   }
   return HttpResponse(template.render(context, request))
