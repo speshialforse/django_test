@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.template import loader
 import json
 from json import JSONEncoder
+import requests
 
 @api_view(['GET', 'POST', 'DELETE'])
 def tutorial_list(request):
@@ -109,6 +110,38 @@ def members(request):
         'jsonmymembers': jsonString,
     }
     return HttpResponse(template.render(context, request))
+
+@api_view(['GET', 'POST', 'DELETE'])
+def testjson(request):
+    if request.method == 'GET':
+        # tutorials = Tutorial.objects.all()
+        # print(tutorials)
+        # title = request.query_params.get('title', None)
+        # print(title)
+        # if title is not None:
+        #     tutorials = tutorials.filter(title__icontains=title)
+        
+        # tutorials_serializer = TutorialSerializer(tutorials, many=True)
+        # print(tutorials_serializer)
+        resp = requests.post('https://httpbin.org/post', data={'website': 'datagy.io'})
+        print(resp.text)
+        return JsonResponse(json.loads(resp.text), safe=False)
+        # 'safe=False' for objects serialization
+ 
+    elif request.method == 'POST':
+        # tutorial_data = JSONParser().parse(request)
+        # tutorial_serializer = TutorialSerializer(data=tutorial_data)
+        # if tutorial_serializer.is_valid():
+        #     tutorial_serializer.save()
+        print(request)
+        jsn = JSONParser().parse(request)
+        jsn["modifed"] = "dgdfgdfg"
+        newJson = {"jopa":"jopnaya","pizda":"nax","result": jsn["test"]}
+        return JsonResponse(newJson, safe=False) 
+        # return JsonResponse(tutorial_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE':
+        return JsonResponse({'test':'DELETE'}) 
 
 # A class with JSON Serialization support
 

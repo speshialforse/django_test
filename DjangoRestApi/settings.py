@@ -28,8 +28,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # DEBUG = True
 DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
-# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
-ALLOWED_HOSTS = ["dmitry-django-test.onrender.com", "localhost"]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ")
+# ALLOWED_HOSTS = ["dmitry-django-test.onrender.com", "localhost"]
 # ALLOWED_HOSTS = []
 
 
